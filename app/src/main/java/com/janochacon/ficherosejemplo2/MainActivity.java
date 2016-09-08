@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,41 +18,41 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 public class MainActivity extends AppCompatActivity {
-
-    private Button btnEscribirFichero = null;
-    private Button btnLeerFichero = null;
-    private Button btnEscribirSD = null;
-    private Button btnLeerSD = null;
-    private Button btnLeerRaw = null;
-
+    //declaramos los botones
+    private Button btnEscribirFichero;
+    private Button btnLeerFichero;
+    private Button btnEscribirSD;
+    private Button btnLeerSD;
+    private Button btnLeerRaw;
+    private TextView salida;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //enlazamos los botones
         btnEscribirFichero = (Button)findViewById(R.id.BtnEscribirFichero);
         btnLeerFichero = (Button)findViewById(R.id.BtnLeerFichero);
         btnEscribirSD = (Button)findViewById(R.id.BtnEscribirSD);
         btnLeerSD = (Button)findViewById(R.id.BtnLeerSD);
         btnLeerRaw = (Button)findViewById(R.id.BtnLeerRaw);
+        salida = (TextView)findViewById(R.id.textView);
 
         btnEscribirFichero.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0)
             {
-                try
-                {
+                try {
                     OutputStreamWriter fout =
                             new OutputStreamWriter(
                                     openFileOutput("prueba_int.txt", Context.MODE_PRIVATE));
 
                     fout.write("Texto de prueba.");
                     fout.close();
-
+                    salida.setText("Fichero creado!");
                     Log.i("Ficheros", "Fichero creado!");
-                }
-                catch (Exception ex)
-                {
+
+                } catch (Exception ex){
                     Log.e("Ficheros", "Error al escribir fichero a memoria interna");
                 }
             }
@@ -60,21 +61,18 @@ public class MainActivity extends AppCompatActivity {
         btnLeerFichero.setOnClickListener(new View.OnClickListener() {
             public void onClick(View arg0)
             {
-                try
-                {
+                try {
                     BufferedReader fin =
                             new BufferedReader(
                                     new InputStreamReader(
                                             openFileInput("prueba_int.txt")));
-
                     String texto = fin.readLine();
                     fin.close();
 
                     Log.i("Ficheros", "Fichero leido!");
+                    salida.setText("Fichero leido!");
                     Log.i("Ficheros", "Texto: " + texto);
-                }
-                catch (Exception ex)
-                {
+                }catch (Exception ex){
                     Log.e("Ficheros", "Error al leer fichero desde memoria interna");
                 }
             }
@@ -84,9 +82,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View arg0)
             {
                 String linea = "";
-
-                try
-                {
+                try {
                     InputStream fraw =
                             getResources().openRawResource(R.raw.prueba_raw);
 
@@ -97,10 +93,9 @@ public class MainActivity extends AppCompatActivity {
                     fraw.close();
 
                     Log.i("Ficheros", "Fichero RAW leido!");
+                    salida.setText("Fichero leido!" + linea);
                     Log.i("Ficheros", "Texto: " + linea);
-                }
-                catch (Exception ex)
-                {
+                } catch (Exception ex) {
                     Log.e("Ficheros", "Error al leer fichero desde recurso raw");;
                 }
             }
@@ -149,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
                         fout.close();
 
                         Log.i("Ficheros", "Fichero SD creado!");
+                        salida.setText("Fichero SD creado!");
                     }
                     catch (Exception ex)
                     {
@@ -176,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
                     fin.close();
 
                     Log.i("Ficheros", "Fichero SD leido!");
+                    salida.setText("Fichero SD leido!" + texto);
                     Log.i("Ficheros", "Texto: " + texto);
                 }
                 catch (Exception ex)
